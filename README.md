@@ -189,7 +189,7 @@ honeyscan/
 ### Launching the Project
 
 ```bash
-git clone https://github.com/beesyst/honeyscan.git
+git clone https://github.com/mehtahet619/HoneyScan.git
 cd honeyscan
 bash start.sh
 ```
