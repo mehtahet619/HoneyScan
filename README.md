@@ -11,7 +11,7 @@
 - **Report generation**: TERMINAL, HTML, PDF.  
 - **Docker isolation** — separate containers for core and database.  
 - **Logging** — separate logs for host and container.  
- - **Multilingual support** — REMOVED: project is English-only. All docs and messages are in English.
+ - **Multilingual support (NA)** — (Under Developing): project is English-only. All docs and messages are in English.
 
 ## Use Cases
 
