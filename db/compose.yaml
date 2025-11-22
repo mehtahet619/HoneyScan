@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:17.5
+    container_name: honeyscan_postgres
+    environment:
+      POSTGRES_USER: honeyscan
+      POSTGRES_PASSWORD: securepass
+      POSTGRES_DB: honeyscan
+    ports:
+      - "5432:5432"
+    volumes:
+      - data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      honeyscan_network:
+
+volumes:
+  data:
+
+networks:
+  honeyscan_network:
+    external: true

@@ -1,0 +1,6 @@
+logs/*.log
+reports/*
+!reports/.gitkeep
+core/__pycache__/
+node_modules/
+
