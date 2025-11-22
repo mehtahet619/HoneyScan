@@ -1,0 +1,542 @@
+{
+  "levels": {
+    "custom": {
+      "ip": {},
+      "domain": {},
+      "network": {}
+    },
+    "easy": {
+      "ip": {
+        "tcp": {
+          "ports": [22, 80, 443],
+          "flags": "-sS -Pn -T4 --open",
+          "scripts": ["default"],
+          "enabled": true
+        },
+        "udp": {
+          "ports": [53],
+          "flags": "-sU -Pn -T4",
+          "scripts": ["dns-recursion"],
+          "enabled": true
+        },
+        "icmp": {
+          "ports": [],
+          "flags": "-sn -PE",
+          "scripts": [],
+          "enabled": true
+        },
+        "sctp": {
+          "ports": [3868],
+          "flags": "-sY -Pn",
+          "scripts": [],
+          "enabled": true
+        },
+        "ip_proto": {
+          "ports": [],
+          "flags": "-sO -Pn",
+          "scripts": [],
+          "enabled": true
+        }
+      },
+      "domain": {
+        "tcp": {
+          "ports": [80, 443],
+          "flags": "-sS -Pn -T4 --open",
+          "scripts": ["default"],
+          "enabled": true
+        },
+        "udp": {
+          "ports": [53],
+          "flags": "-sU -Pn -T4",
+          "scripts": ["dns-recursion"],
+          "enabled": true
+        },
+        "icmp": {
+          "ports": [],
+          "flags": "-sn -PE",
+          "scripts": [],
+          "enabled": true
+        },
+        "sctp": {
+          "ports": [3868],
+          "flags": "-sY -Pn",
+          "scripts": [],
+          "enabled": true
+        },
+        "ip_proto": {
+          "ports": [],
+          "flags": "-sO -Pn",
+          "scripts": [],
+          "enabled": false
+        }
+      },
+      "network": {
+        "icmp": {
+          "ports": [],
+          "flags": "-sn -PE",
+          "scripts": [],
+          "enabled": true
+        },
+        "tcp": {
+          "ports": [22, 80, 443],
+          "flags": "-sS -Pn -T5 --max-retries 1",
+          "scripts": [],
+          "enabled": true
+        },
+        "udp": {
+          "ports": [53],
+          "flags": "-sU -Pn -T5 --max-retries 1",
+          "scripts": [],
+          "enabled": true
+        },
+        "sctp": {
+          "ports": [],
+          "flags": "",
+          "scripts": [],
+          "enabled": false
+        }
+      }
+    },
+    "middle": {
+      "ip": {
+        "tcp": {
+          "ports": ["1-1000"],
+          "flags": "-sS -sV -Pn -T4 --open --reason",
+          "scripts": [
+            "default",
+            "ftp-anon",
+            "ssl-cert",
+            "rpcinfo",
+            "banner",
+            "smtp-commands",
+            "http-title"
+          ],
+          "enabled": true
+        },
+        "udp": {
+          "ports": ["1-100"],
+          "flags": "-sU -sV -Pn -T4 --open",
+          "scripts": ["dns-recursion", "ntp-info", "snmp-info"],
+          "enabled": true
+        },
+        "sctp": {
+          "ports": [3868, 9899],
+          "flags": "-sY -sZ -Pn",
+          "scripts": [],
+          "enabled": true
+        },
+        "icmp": {
+          "ports": [],
+          "flags": "-sn -PE -PP -PM",
+          "scripts": [],
+          "enabled": true
+        },
+        "ip_proto": {
+          "ports": [],
+          "flags": "-sO -Pn",
+          "scripts": [],
+          "enabled": true
+        }
+      },
+      "domain": {
+        "tcp": {
+          "ports": ["1-1000"],
+          "flags": "-sS -sV -Pn -T4 --open --reason",
+          "scripts": [
+            "default",
+            "ftp-anon",
+            "ssl-cert",
+            "rpcinfo",
+            "http-title",
+            "banner",
+            "smtp-commands"
+          ],
+          "enabled": true
+        },
+        "udp": {
+          "ports": ["1-100"],
+          "flags": "-sU -sV -Pn -T4 --open",
+          "scripts": ["dns-recursion", "ntp-info", "snmp-info"],
+          "enabled": true
+        },
+        "sctp": {
+          "ports": [3868, 9899],
+          "flags": "-sY -sZ -Pn",
+          "scripts": [],
+          "enabled": true
+        },
+        "icmp": {
+          "ports": [],
+          "flags": "-sn -PE -PP -PM",
+          "scripts": [],
+          "enabled": true
+        },
+        "ip_proto": {
+          "ports": [],
+          "flags": "-sO -Pn",
+          "scripts": [],
+          "enabled": true
+        }
+      },
+      "network": {
+        "icmp": {
+          "ports": [],
+          "flags": "-sn -PE -PP -PM",
+          "scripts": [],
+          "enabled": true
+        },
+        "tcp": {
+          "ports": ["1-100"],
+          "flags": "-sS -Pn -T4 --open --max-retries 1",
+          "scripts": ["default", "banner"],
+          "enabled": true
+        },
+        "udp": {
+          "ports": ["1-50"],
+          "flags": "-sU -Pn -T4 --open --max-retries 1",
+          "scripts": [
+            "ntp-info",
+            "snmp-info",
+            "dns-recursion",
+            "dns-service-discovery"
+          ],
+          "enabled": true
+        },
+        "sctp": {
+          "ports": [3868, 9899],
+          "flags": "-sY -sZ -Pn --max-retries 1",
+          "scripts": [],
+          "enabled": true
+        }
+      }
+    },
+    "hard": {
+      "ip": {
+        "tcp": {
+          "ports": ["1-2000"],
+          "flags": "-sS -sV -sC -Pn -O -T4 --open --reason --osscan-guess",
+          "scripts": [
+            "default",
+            "safe",
+            "vuln",
+            "banner",
+            "ftp-anon",
+            "ssl-cert",
+            "rpcinfo",
+            "http-title",
+            "auth",
+            "smb-os-discovery",
+            "smtp-commands",
+            "ssh2-enum-algos",
+            "http-enum",
+            "vulners"
+          ],
+          "enabled": true
+        },
+        "udp": {
+          "ports": ["1-300"],
+          "flags": "-sU -sV -Pn -T4 --open",
+          "scripts": [
+            "dns-zone-transfer",
+            "ntp-info",
+            "snmp-info",
+            "udp-proto-discovery",
+            "upnp-info",
+            "snmp-brute",
+            "ike-version"
+          ],
+          "enabled": true
+        },
+        "sctp": {
+          "ports": [3868, 9899],
+          "flags": "-sY -sZ -Pn",
+          "scripts": ["sctp-cookie-echo"],
+          "enabled": true
+        },
+        "icmp": {
+          "ports": [],
+          "flags": "-sn -PE -PP -PM",
+          "scripts": [],
+          "enabled": true
+        },
+        "ip_proto": {
+          "ports": [],
+          "flags": "-sO -Pn",
+          "scripts": [],
+          "enabled": true
+        }
+      },
+      "domain": {
+        "tcp": {
+          "ports": ["1-2000"],
+          "flags": "-sS -sV -sC -Pn -O -T4 --open --reason --osscan-guess",
+          "scripts": [
+            "default",
+            "safe",
+            "vuln",
+            "banner",
+            "ftp-anon",
+            "ssl-cert",
+            "rpcinfo",
+            "http-title",
+            "auth",
+            "smb-os-discovery",
+            "smtp-commands",
+            "ssh2-enum-algos",
+            "http-enum",
+            "vulners"
+          ],
+          "enabled": true
+        },
+        "udp": {
+          "ports": ["1-300"],
+          "flags": "-sU -sV -Pn -T4 --open",
+          "scripts": [
+            "dns-zone-transfer",
+            "ntp-info",
+            "snmp-info",
+            "udp-proto-discovery",
+            "upnp-info",
+            "snmp-brute",
+            "ike-version"
+          ],
+          "enabled": true
+        },
+        "sctp": {
+          "ports": [3868, 9899],
+          "flags": "-sY -sZ -Pn",
+          "scripts": ["sctp-cookie-echo"],
+          "enabled": true
+        },
+        "icmp": {
+          "ports": [],
+          "flags": "-sn -PE -PP -PM",
+          "scripts": [],
+          "enabled": true
+        },
+        "ip_proto": {
+          "ports": [],
+          "flags": "-sO -Pn",
+          "scripts": [],
+          "enabled": true
+        }
+      },
+      "network": {
+        "icmp": {
+          "ports": [],
+          "flags": "-sn -PE -PP -PM",
+          "scripts": [],
+          "enabled": true
+        },
+        "tcp": {
+          "ports": ["1-200"],
+          "flags": "-sS -sV -sN -sF -Pn -T4 --open --max-retries 1",
+          "scripts": ["default", "vuln", "banner", "vulners"],
+          "enabled": true
+        },
+        "udp": {
+          "ports": ["1-100"],
+          "flags": "-sU -sV -Pn -T4 --open --max-retries 1",
+          "scripts": [
+            "ntp-info",
+            "snmp-info",
+            "udp-proto-discovery",
+            "snmp-brute",
+            "ike-version"
+          ],
+          "enabled": true
+        },
+        "sctp": {
+          "ports": [3868, 9899],
+          "flags": "-sY -sZ -Pn --max-retries 1",
+          "scripts": ["sctp-cookie-echo"],
+          "enabled": true
+        }
+      }
+    },
+    "extreme": {
+      "ip": {
+        "tcp": {
+          "ports": ["1-65535"],
+          "flags": "-sS -sV -sC -sT -sA -sW -sN -sF -sX -sM -Pn -O -T5 --version-all --open --reason --osscan-guess --traceroute",
+          "scripts": [
+            "default",
+            "vuln",
+            "safe",
+            "auth",
+            "exploit",
+            "malware",
+            "brute",
+            "banner",
+            "ssl-cert",
+            "ftp-anon",
+            "dns-recursion",
+            "smtp-commands",
+            "http-enum",
+            "snmp-info",
+            "ssh2-enum-algos",
+            "rpcinfo",
+            "http-title",
+            "http-headers",
+            "http-methods",
+            "smb-os-discovery",
+            "http-shellshock",
+            "http-passwd",
+            "http-php-version",
+            "http-server-header",
+            "http-vuln-cve2015-1635",
+            "http-vuln-cve2017-5638",
+            "http-vuln-cve2017-5689",
+            "http-vuln-cve2018-15473",
+            "vulners"
+          ],
+          "enabled": true
+        },
+        "udp": {
+          "ports": ["1-65535"],
+          "flags": "-sU -sV -Pn -T5 --version-all --max-retries 2 --host-timeout 10m",
+          "scripts": [
+            "dns-zone-transfer",
+            "ntp-info",
+            "snmp-info",
+            "udp-proto-discovery",
+            "upnp-info",
+            "snmp-brute",
+            "ike-version",
+            "tftp-enum",
+            "dns-recursion",
+            "snmp-interfaces",
+            "snmp-sysdescr",
+            "ike-version"
+          ],
+          "enabled": true
+        },
+        "sctp": {
+          "ports": [1, 3868, 9899, 2905],
+          "flags": "-sY -sZ -Pn",
+          "scripts": ["sctp-cookie-echo"],
+          "enabled": true
+        },
+        "icmp": {
+          "ports": [],
+          "flags": "-sn -PE -PP -PM",
+          "scripts": [],
+          "enabled": true
+        },
+        "ip_proto": {
+          "ports": [],
+          "flags": "-sO -Pn",
+          "scripts": [],
+          "enabled": true
+        }
+      },
+      "domain": {
+        "tcp": {
+          "ports": ["1-65535"],
+          "flags": "-sS -sV -sC -sT -sA -sW -sN -sF -sX -sM -Pn -O -T5 --version-all --open --reason --osscan-guess --traceroute",
+          "scripts": [
+            "default",
+            "vuln",
+            "safe",
+            "auth",
+            "exploit",
+            "malware",
+            "brute",
+            "banner",
+            "ssl-cert",
+            "ftp-anon",
+            "dns-recursion",
+            "smtp-commands",
+            "http-enum",
+            "snmp-info",
+            "ssh2-enum-algos",
+            "rpcinfo",
+            "http-title",
+            "http-headers",
+            "http-methods",
+            "smb-os-discovery",
+            "http-shellshock",
+            "http-passwd",
+            "http-php-version",
+            "http-server-header",
+            "http-vuln-cve2015-1635",
+            "http-vuln-cve2017-5638",
+            "http-vuln-cve2017-5689",
+            "http-vuln-cve2018-15473",
+            "vulners"
+          ],
+          "enabled": true
+        },
+        "udp": {
+          "ports": ["1-65535"],
+          "flags": "-sU -sV -Pn -T5 --version-all --max-retries 2 --host-timeout 10m",
+          "scripts": [
+            "dns-zone-transfer",
+            "ntp-info",
+            "snmp-info",
+            "udp-proto-discovery",
+            "upnp-info",
+            "snmp-brute",
+            "ike-version",
+            "tftp-enum",
+            "dns-recursion",
+            "snmp-interfaces",
+            "snmp-sysdescr",
+            "ike-version"
+          ],
+          "enabled": true
+        },
+        "sctp": {
+          "ports": [1, 3868, 9899, 2905],
+          "flags": "-sY -sZ -Pn",
+          "scripts": ["sctp-cookie-echo"],
+          "enabled": true
+        },
+        "icmp": {
+          "ports": [],
+          "flags": "-sn -PE -PP -PM",
+          "scripts": [],
+          "enabled": true
+        },
+        "ip_proto": {
+          "ports": [],
+          "flags": "-sO -Pn",
+          "scripts": [],
+          "enabled": true
+        }
+      },
+      "network": {
+        "icmp": {
+          "ports": [],
+          "flags": "-sn -PE -PP -PM",
+          "scripts": [],
+          "enabled": true
+        },
+        "tcp": {
+          "ports": ["1-1000"],
+          "flags": "-sS -sV -sN -sF -Pn -T4 --open --max-retries 1",
+          "scripts": ["default", "vuln", "banner", "vulners"],
+          "enabled": true
+        },
+        "udp": {
+          "ports": ["1-1000"],
+          "flags": "-sU -sV -Pn -T4 --max-retries 1 --host-timeout 10m",
+          "scripts": [
+            "ntp-info",
+            "snmp-info",
+            "udp-proto-discovery",
+            "snmp-brute",
+            "ike-version"
+          ],
+          "enabled": true
+        },
+        "sctp": {
+          "ports": [1, 3868, 9899, 2905],
+          "flags": "-sY -sZ -Pn --max-retries 1",
+          "scripts": ["sctp-cookie-echo"],
+          "enabled": true
+        }
+      }
+    }
+  }
+}

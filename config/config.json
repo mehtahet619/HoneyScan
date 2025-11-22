@@ -1,0 +1,148 @@
+{
+  "database": {
+    "container_name": "honeyscan_postgres",
+    "POSTGRES_USER": "honeyscan",
+    "POSTGRES_PASSWORD": "securepass",
+    "POSTGRES_DB": "honeyscan",
+    "POSTGRES_PORT": 5432,
+    "POSTGRES_HOST": "honeyscan_postgres"
+  },
+  "docker_network": "honeyscan_network",
+  "scan_config": {
+    "target_ip": "64.227.103.24",
+    "target_domain": "honey.scanme.sh",
+    "target_network": "64.227.103.0/24",
+    "target_api": "https://api.honey.scanme.sh/openapi.json",
+    "report_formats": ["terminal", "html"],
+    "open_report": true,
+    "clear_reports": true,
+    "clear_logs": true,
+    "clear_db": true,
+    "report_theme": "dark"
+  },
+  "report_category_order": ["Network", "AppSec", "DNS", "Vuln"],
+  "plugins": [
+    {
+      "name": "nmap",
+      "enabled": true,
+      "category": "Network",
+      "install": ["apt-get update", "apt-get install -y nmap"],
+      "depends_on": [],
+      "strict_dependencies": false,
+      "level": "middle"
+    },
+    {
+      "name": "nikto",
+      "enabled": false,
+      "category": "AppSec",
+      "install": [
+        "apt-get update",
+        "apt-get install -y git perl libnet-ssleay-perl libwhisker2-perl liblwp-useragent-determined-perl",
+        "cd /opt && git clone https://github.com/sullo/nikto.git",
+        "echo '#!/bin/bash' > /usr/local/bin/nikto",
+        "echo 'cd /opt/nikto/program' >> /usr/local/bin/nikto",
+        "echo 'perl nikto.pl \"$@\"' >> /usr/local/bin/nikto",
+        "chmod +x /usr/local/bin/nikto"
+      ],
+      "depends_on": ["nmap"],
+      "strict_dependencies": false,
+      "level": "easy"
+    },
+    {
+      "name": "dig",
+      "enabled": false,
+      "ip_required": false,
+      "vhost_required": true,
+      "category": "DNS",
+      "install": ["apt-get update", "apt-get install -y dnsutils"],
+      "command": "",
+      "output": "results/dig.json",
+      "parser": "python",
+      "level": "easy",
+      "levels": {
+        "custom": {
+          "args": ""
+        },
+        "easy": {
+          "args": "A"
+        },
+        "middle": {
+          "args": "A MX NS TXT"
+        },
+        "hard": {
+          "args": "A MX NS TXT CNAME SOA"
+        },
+        "extreme": {
+          "args": "A MX NS TXT CNAME SOA SPF ANY"
+        }
+      }
+    },
+    {
+      "name": "nuclei",
+      "enabled": false,
+      "ip_required": false,
+      "vhost_required": true,
+      "category": "Vuln",
+      "install": [
+        "go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest",
+        "cp /root/go/bin/nuclei /usr/local/bin/nuclei"
+      ],
+      "command": "nuclei {args} -u http://{target} -jsonl -o {stdout} -t /root/nuclei-templates",
+      "output": "results/nuclei.json",
+      "parser": "json",
+      "level": "easy",
+      "levels": {
+        "custom": {
+          "args": "-t /nuclei-templates -severity medium,high"
+        },
+        "easy": {
+          "args": "-severity low,medium"
+        },
+        "middle": {
+          "args": "-severity medium,high -rate-limit 50"
+        },
+        "hard": {
+          "args": "-severity high,critical -rate-limit 100"
+        },
+        "extreme": {
+          "args": "-severity critical -rate-limit 200 -c 100"
+        }
+      }
+    },
+    {
+      "name": "amass",
+      "category": "Discovery",
+      "command": "amass enum -d {target} -json /results/amass.json",
+      "output": "results/amass.json",
+      "enabled": false
+    },
+    {
+      "name": "subfinder",
+      "category": "discovery",
+      "command": "subfinder -d {target} -oJ /results/subfinder.json",
+      "output": "results/subfinder.json",
+      "enabled": false
+    },
+    {
+      "name": "httpx",
+      "category": "scanning",
+      "command": "httpx -l /data/targets.txt -json -o /results/httpx.json",
+      "output": "results/httpx.json",
+      "enabled": false
+    },
+    {
+      "name": "naabu",
+      "category": "ports",
+      "command": "naabu -host {target} -json -o /results/naabu.json",
+      "output": "results/naabu.json",
+      "enabled": false
+    },
+    {
+      "name": "ffuf",
+      "category": "fuzzing",
+      "command": "ffuf -u http://{target}/FUZZ -w /wordlists/common.txt -of json -o /results/ffuf.json",
+      "output": "results/ffuf.json",
+      "enabled": false
+    }
+  ]
+}
